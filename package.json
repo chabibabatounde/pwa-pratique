@@ -3,11 +3,13 @@
   "version": "1.0.0",
   "description": "Cours PWA Hello word",
   "main": "main.js",
+  
   "scripts": {
     "jsonserver": "json-server -p 3001 --watch db.json",
     "start": "live-server --port=3000",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+
   "repository": {
     "type": "git",
     "url": "git+https://github.com/chabibabatounde/pwa-pratique.git"
@@ -18,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/chabibabatounde/pwa-pratique/issues"
   },
-  "homepage": "https://github.com/chabibabatounde/pwa-pratique#readme"
+  "homepage": "https://github.com/chabibabatounde/pwa-pratique#readme",
+  "dependencies": {
+    "sw.js": "0.0.1"
+  }
 }
