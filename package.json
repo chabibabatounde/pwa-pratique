@@ -6,7 +6,7 @@
   
   "scripts": {
     "jsonserver": "json-server -p 3001 --watch db.json",
-    "start": "live-server --port=3000",
+    "start": "live-server --port=9580",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
 

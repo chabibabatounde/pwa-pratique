@@ -1,8 +1,6 @@
 console.log('hello depuis main');
 const technosDiv = document.querySelector('#technos');
-
 function loadTechnologies(technos) {
-    
     fetch('http://localhost:3001/technos')
         .then(response => {
             response.json()
@@ -16,14 +14,58 @@ function loadTechnologies(technos) {
 }
 
 loadTechnologies(technos);
-
-
-// ..
 if(navigator.serviceWorker) {
     navigator.serviceWorker
-        .register('sw.js')
-        .catch(err => console.error('service worker NON enregistré', err));
+    .register('sw.js')
+    .catch(err => console.error('service worker NON enregistré', err));
 }
+
+
+
+/*
+if(window.Notification && window.Notification !== "denied"){
+    // demande une permission
+    Notification.requestPermission(perm => {
+        console.log(perm);
+        // vérifie si la permission est acceptée par l'utilisateur
+        if(perm === "granted"){
+            // On crée une nouvelle notification
+            // 7.2 Option de la notification
+            const options = {
+                body : "Body de la notification",
+                icon : "images/icons/icon-72x72.png"
+            }
+            // On crée une nouvelle notification
+            // 7.2 On passe les options en deuxième argument
+            const notif = new Notification("Hello notification", options);
+            console.log('notif envoyé');
+        }
+        else{
+            // Notification refusée
+            console.log("Notification refusée");
+        }
+    })
+}
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /*
