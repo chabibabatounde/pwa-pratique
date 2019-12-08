@@ -1,27 +1,19 @@
 {
-  "name": "pwa-pratique",
+  "name": "veilletechno",
   "version": "1.0.0",
-  "description": "Cours PWA Hello word",
-  "main": "main.js",
-  
+  "main": "index.js",
   "scripts": {
     "jsonserver": "json-server -p 3001 --watch db.json",
-    "start": "live-server --port=9580",
+    "start": "live-server --port=3000",
     "test": "echo \"Error: no test specified\" && exit 1"
-  },
-
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/chabibabatounde/pwa-pratique.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/chabibabatounde/pwa-pratique/issues"
-  },
-  "homepage": "https://github.com/chabibabatounde/pwa-pratique#readme",
   "dependencies": {
-    "sw.js": "0.0.1"
-  }
+    "cors": "^2.8.5",
+    "live-server": "^1.2.0",
+    "web-push": "^3.4.1"
+  },
+  "description": ""
 }

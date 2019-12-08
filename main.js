@@ -1,12 +1,14 @@
 console.log('hello depuis main');
 const technosDiv = document.querySelector('#technos');
+
 function loadTechnologies(technos) {
-    fetch('http://localhost:3001/technos')
+    fetch('https://us-central1-pwa-technos-babatounde-c.cloudfunctions.net/getTechnos')
         .then(response => {
             response.json()
                 .then(technos => {
                     const allTechnos = technos.map(t => `<div><b>${t.name}</b> ${t.description}  <a href="${t.url}">site de ${t.name}</a> </div>`)
                             .join('');
+            
                     technosDiv.innerHTML = allTechnos; 
                 });
         })
@@ -14,77 +16,73 @@ function loadTechnologies(technos) {
 }
 
 loadTechnologies(technos);
+
 if(navigator.serviceWorker) {
     navigator.serviceWorker
-    .register('sw.js')
-    .catch(err => console.error('service worker NON enregistré', err));
+        .register('sw.js')
+        // 8.4 Récupération ou création d'une souscription auprès d'un push service
+        .then(registration =>{
+            // public vapid key generated with web-push
+            const publicKey = "BAqPpl5snI2RR6wkcuSzdvZWGeEqNk4GGJvMWpTqrepaOrEqknEAS5dfcOakn0mSrh7o0PAYv8Urt8GUdCzILvw";
+            registration.pushManager.getSubscription().then(subscription => {
+                if(subscription){
+                    console.log("subscription", subscription);
+                    extractKeysFromArrayBuffer(subscription);
+                    return subscription;
+                }
+                else{
+                    // ask for a subscription
+                    const convertedKey = urlBase64ToUint8Array(publicKey);
+                    return registration.pushManager.subscribe({
+                        userVisibleOnly: true,
+                        applicationServerKey: convertedKey
+                    })
+                    .then(newSubscription => {
+                        console.log('newSubscription', newSubscription);
+                        extractKeysFromArrayBuffer(newSubscription);
+                        return newSubscription;
+                    })
+
+                }
+            })
+        })
+        .catch(err => console.error('service worker NON enregistré', err));
+}
+
+// 8.4 Récupération ou création d'une souscription auprès d'un push service
+function extractKeysFromArrayBuffer(subscription){
+    // no more keys proprety directly visible on the subscription objet. So you have to use getKey()
+    const keyArrayBuffer = subscription.getKey('p256dh');
+    const authArrayBuffer = subscription.getKey('auth');
+    const p256dh = btoa(String.fromCharCode.apply(null, new Uint8Array(keyArrayBuffer)));
+    const auth = btoa(String.fromCharCode.apply(null, new Uint8Array(authArrayBuffer)));
+
+    // 8.5 Envoyer une notification push depuis Node
+    console.log('endpoint :');
+    console.dir(subscription.endpoint);
+    console.log('p256dh key :', p256dh);
+    console.log('auth key :', auth);
 }
 
 
 
-/*
-if(window.Notification && window.Notification !== "denied"){
-    // demande une permission
-    Notification.requestPermission(perm => {
-        console.log(perm);
-        // vérifie si la permission est acceptée par l'utilisateur
-        if(perm === "granted"){
-            // On crée une nouvelle notification
-            // 7.2 Option de la notification
-            const options = {
-                body : "Body de la notification",
-                icon : "images/icons/icon-72x72.png"
-            }
-            // On crée une nouvelle notification
-            // 7.2 On passe les options en deuxième argument
-            const notif = new Notification("Hello notification", options);
-            console.log('notif envoyé');
-        }
-        else{
-            // Notification refusée
-            console.log("Notification refusée");
-        }
-    })
-}
-*/
 
 
 
+// 8.4 Récupération ou création d'une souscription auprès d'un push service
+function urlBase64ToUint8Array(base64String) {
+    const padding = '='.repeat((4 - base64String.length % 4) % 4);
+    const base64 = (base64String + padding)
+        .replace(/-/g, '+')
+        .replace(/_/g, '/');
 
+    const rawData = window.atob(base64);
+    const outputArray = new Uint8Array(rawData.length);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-if(window.caches) {
-    caches.open('veille-techno-1.0');
-    caches.open('other-1.0');
-    caches.keys().then(console.log);
+    for (let i = 0; i < rawData.length; ++i) {
+        outputArray[i] = rawData.charCodeAt(i);
+    }
+    return outputArray;
 }
 
 
-//..
-/*
-if(window.caches) {
-    caches.open('veille-techno-1.0').then(cache => {
-        cache.addAll([
-            'index.html',
-            'main.js',
-            'vendors/bootstrap4.min.css'
-        ]);
-    });
-} 
-*/

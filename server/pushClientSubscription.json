@@ -1,0 +1,7 @@
+{
+    "endpoint": "< Push Subscription URL >",
+    "keys": {
+      "p256dh": "< User Public Encryption Key >",
+      "auth": "< User Auth Secret >"
+    }
+  }
